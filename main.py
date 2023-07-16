@@ -1,6 +1,12 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class SlackChallenge(BaseModel):
+    url_verification: str
+    token: str
+    challenge: str
 
 @app.get("/")
 async def root():
@@ -8,9 +14,9 @@ async def root():
 
 
 
-@app.post("/challenge")
-async def root(challenge: str):
-    return challenge
+@app.post("/slack/events")
+async def root(resp: SlackChallenge):
+    return resp.challenge
 
 
 
