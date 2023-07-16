@@ -8,3 +8,10 @@ async def root():
 
 
 
+@app.post("/challenge")
+async def root(challenge: str):
+    return challenge
+
+
+
+
