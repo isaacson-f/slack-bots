@@ -4,9 +4,9 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class SlackChallenge(BaseModel):
-    url_verification: str
     token: str
     challenge: str
+    type: str
 
 @app.get("/")
 async def root():
