@@ -67,7 +67,7 @@ async def root(resp: Request):
     if (hasattr(resp, 'challenge')):
         return resp.challenge
     else:
-        return resp
+        return await resp.json()
 
 
 
