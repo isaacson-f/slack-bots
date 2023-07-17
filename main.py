@@ -64,7 +64,7 @@ async def root():
 
 @app.post("/slack/events")
 async def root(resp: Request):
-    if (resp.challenge):
+    if (hasattr(resp, 'challenge')):
         return resp.challenge
     else:
         return resp
