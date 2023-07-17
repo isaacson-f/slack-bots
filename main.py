@@ -82,8 +82,8 @@ async def root(resp: dict[str, object]):
             else: 
                 prev_sent = find_word(temp_list[0])
                 if prev_sent is not None:
-                    print(f"Thread Time: {datetime.timestamp(prev_sent['date_millis'])}, Prev Sent Word: {temp_list[0]}")
-                    client.chat_postMessage(channel="C0441R6SKBN", text=f"{temp_list[0]} was previously sent on {prev_sent['date_millis']}", thread_ts=millis_time)
+                    print(f"Thread Time: {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}, Prev Sent Word: {temp_list[0]}")
+                    client.chat_postMessage(channel="C0441R6SKBN", text=f"{temp_list[0]} was previously sent on {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}", thread_ts=millis_time)
                 else:
                     insert_new_word(temp_list[0], millis_time, user)
                     client.chat_postMessage(channel="C0441R6SKBN", text="Great Word :biting_lip:", thread_ts=millis_time)
