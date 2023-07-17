@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -63,8 +63,11 @@ async def root():
 
 
 @app.post("/slack/events")
-async def root(resp: SlackChallenge):
-    return resp.challenge
+async def root(resp: Request):
+    if (resp.challenge):
+        return resp.challenge
+    else:
+        return resp
 
 
 
