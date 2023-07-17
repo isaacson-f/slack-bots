@@ -73,6 +73,9 @@ async def root(resp: dict[str, object]):
     elif resp.get('event', False):
         event = resp['event']
         if event.get('text', False) and event.get('ts', False) and event.get('user', False):
+            if event.get('subtype', False):
+                print(f"Only posts accepted; Received: {event.get('subtype')}")
+                return
             message = event['text']
             millis_time = float(event['ts'])
             user = event['user']
