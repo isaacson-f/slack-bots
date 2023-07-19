@@ -28,11 +28,7 @@ async def root():
 @app.post("/history", status_code=201)
 async def root(req: HistoricalChannel, response: Response):
     if req.channel_id == "C0441R6SKBN":
-        try:
-            add_historical_goodwords()
-            response.status_code = 201
-        except Exception as e:
-            response.status_code = 400
+        add_historical_goodwords()
     else:
         response.status_code = 404
     
@@ -42,11 +38,7 @@ async def root(req: dict[str, object], resp: Response):
     if req.get('challenge', False):
         return req['challenge']
     elif req.get('event', False):
-        try:
-            process_event(req.get('event'))
-        except Exception as e:
-            print(f"{e}")
-            resp.status_code = 404
+        process_event(req.get('event'))
     else:
         resp.status_code = 400
         print(f"Event missing attribute: {req}")

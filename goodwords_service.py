@@ -21,32 +21,30 @@ def add_historical_goodwords():
         date_millis = float(message['ts'])
         user_id = message['user']
         temp_list = list(filter(lambda a: len(a) > 0, word.split(" ")))
-        if len(temp_list) > 1:
-            raise TypeError(f"invalid submission: {temp_list}")
-        else:
+        if len(temp_list) is not 1:
             handle_word_sent(temp_list[0], date_millis, user_id)
 
 def process_event(event_obj: object):
     event = event_obj['event']
     if event.get('text', False) and event.get('ts', False) and event.get('user', False):
         if event.get('subtype', False):
-            raise TypeError(f"Only posts accepted; Received: {event.get('subtype')}")
+            print(f"Only posts accepted; Received: {event.get('subtype')}")
         message = event['text']
         millis_time = float(event['ts'])
         user = event['user']
         temp_list = list(filter(lambda a: len(a) > 0, message.split(" ")))
         if len(temp_list) > 1:
-            raise TypeError(f"invalid submission: {temp_list}")
+            print(f"invalid submission: {temp_list}")
         else: 
             handle_word_sent(temp_list[0], millis_time, user)
     else:
-        raise TypeError(f"Event missing attribute ts or text: {event}")
+        print(f"Event missing attribute ts or text: {event}")
 
 def handle_word_sent(word: str, millis_time: float, user_id: str):
     prev_sent = find_word(word)
     if prev_sent is not None:
         client.chat_postMessage(channel="C0441R6SKBN", text=f"{word} was previously sent on {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}", thread_ts=str(millis_time))
-        raise FileExistsError(f"Thread Time: {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}, Prev Sent Word: {word}")
+        print(f"Thread Time: {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}, Prev Sent Word: {word}")
     else:
         insert_new_word(word, millis_time, user_id)
         client.chat_postMessage(channel="C0441R6SKBN", text="Great Word :biting_lip:", thread_ts=str(millis_time))
