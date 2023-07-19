@@ -63,7 +63,6 @@ def insert_new_word(word: str, date_millis: float, user: str):
 
 
 def find_word(word: str):
-    print(f"Searching for {word.lower}")
     result = good_words_collection.find_one({"word": word.lower})
     print(f"Found: {result}")
     return result
