@@ -53,8 +53,9 @@ def handle_word_sent(word: str, millis_time: float, user_id: str, historical: bo
 
 
 def insert_new_word(word: str, date_millis: float, user: str):
+    word_lowercase = word.lower()
     document = {
-        "word": word,
+        "word": word_lowercase,
         "date_millis": date_millis,
         "user_id": user
     }
