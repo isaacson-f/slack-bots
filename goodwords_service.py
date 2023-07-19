@@ -24,8 +24,7 @@ def add_historical_goodwords():
         if len(temp_list) == 1:
             handle_word_sent(temp_list[0], date_millis, user_id, True)
 
-def process_event(event_obj: object):
-    event = event_obj['event']
+def process_event(event: object):
     if event.get('text', False) and event.get('ts', False) and event.get('user', False):
         if event.get('subtype', False):
             print(f"Only posts accepted; Received: {event.get('subtype')}")
