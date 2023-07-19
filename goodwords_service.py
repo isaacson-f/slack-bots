@@ -22,7 +22,7 @@ def add_historical_goodwords():
         user_id = message['user']
         temp_list = list(filter(lambda a: len(a) > 0, word.split(" ")))
         if len(temp_list) == 1:
-            handle_word_sent(temp_list[0], date_millis, user_id)
+            handle_word_sent(temp_list[0], date_millis, user_id, True)
 
 def process_event(event_obj: object):
     event = event_obj['event']
@@ -40,14 +40,15 @@ def process_event(event_obj: object):
     else:
         print(f"Event missing attribute ts or text: {event}")
 
-def handle_word_sent(word: str, millis_time: float, user_id: str):
+def handle_word_sent(word: str, millis_time: float, user_id: str, historical: bool=False):
     prev_sent = find_word(word)
-    if prev_sent is not None:
+    if prev_sent is not None and not historical:
         client.chat_postMessage(channel="C0441R6SKBN", text=f"{word} was previously sent on {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}", thread_ts=str(millis_time))
         print(f"Thread Time: {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}, Prev Sent Word: {word}")
+    elif not historical:
+        client.chat_postMessage(channel="C0441R6SKBN", text="Great Word :biting_lip:", thread_ts=str(millis_time))
     else:
         insert_new_word(word, millis_time, user_id)
-        client.chat_postMessage(channel="C0441R6SKBN", text="Great Word :biting_lip:", thread_ts=str(millis_time))
 
 
 def insert_new_word(word: str, date_millis: float, user: str):
