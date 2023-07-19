@@ -28,8 +28,11 @@ async def root():
 @app.post("/history", status_code=201)
 async def root(req: HistoricalChannel, response: Response):
     if req.channel_id == "C0441R6SKBN":
-        add_historical_goodwords()
-        response.status_code = 201
+        try:
+            add_historical_goodwords()
+            response.status_code = 201
+        except Exception as e:
+            response.status_code = 400
     else:
         response.status_code = 404
     
