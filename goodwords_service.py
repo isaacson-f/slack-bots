@@ -21,7 +21,7 @@ def add_historical_goodwords():
         date_millis = float(message['ts'])
         user_id = message['user']
         temp_list = list(filter(lambda a: len(a) > 0, word.split(" ")))
-        if len(temp_list) is not 1:
+        if len(temp_list) == 1:
             handle_word_sent(temp_list[0], date_millis, user_id)
 
 def process_event(event_obj: object):
