@@ -38,6 +38,7 @@ async def root(req: dict[str, object], resp: Response):
     if req.get('challenge', False):
         return req['challenge']
     elif req.get('event', False):
+        print(f"Event Received: {req.get('event')}")
         process_event(req.get('event'))
     else:
         resp.status_code = 400
