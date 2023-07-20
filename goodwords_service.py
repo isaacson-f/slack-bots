@@ -28,8 +28,8 @@ def add_historical_goodwords():
 
 def process_event(event: object):
     if event.get('text', False) and event.get('ts', False) and event.get('user', False):
-        if event.get('subtype', False):
-            print(f"Only posts accepted; Received: {event.get('subtype')}")
+        if event.get('thread_ts', False):
+            print(f"Replies to posts not accepted. Received: {event}")
         message = event['text']
         millis_time = float(event['ts'])
         user = event['user']
