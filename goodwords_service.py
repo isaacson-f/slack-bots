@@ -3,14 +3,16 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import logging
 import os
-from dotenv import load_dotenv
 import mongo_client
 from typing import Optional, List, Union
+import random
 
 
 client = WebClient(token=os.environ.get("SLACK_TOKEN"))
 
 good_words_collection = mongo_client.get_good_words_collection()
+
+EMOJIS = os.environ.get("VALID_EMOJIS").split(' ')
 
 def add_historical_goodwords():
     # Call the conversations.list method using the WebClient
@@ -47,7 +49,7 @@ def handle_word_sent(word: str, millis_time: float, user_id: str, historical: bo
         print(f"Thread Time: {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}, Prev Sent Word: {word}")
     elif not historical:
         insert_new_word(word, millis_time, user_id)
-        client.reactions_add(channel="C0441R6SKBN", name="biting_lip", timestamp=str(millis_time))
+        client.reactions_add(channel="C0441R6SKBN", name=random.choice(EMOJIS), timestamp=str(millis_time))
     else:
         insert_new_word(word, millis_time, user_id)
 
