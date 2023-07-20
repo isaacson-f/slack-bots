@@ -46,7 +46,8 @@ def handle_word_sent(word: str, millis_time: float, user_id: str, historical: bo
             client.chat_postMessage(channel="C0441R6SKBN", text=f"{word} was previously sent on {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}", thread_ts=str(millis_time))
         print(f"Thread Time: {datetime.fromtimestamp(prev_sent['date_millis']).strftime('%m/%d/%Y')}, Prev Sent Word: {word}")
     elif not historical:
-        client.chat_postMessage(channel="C0441R6SKBN", text="Great Word :biting_lip:", thread_ts=str(millis_time))
+        client.reactions_add(channel="C0441R6SKBN", name=":biting_lip:", thread_ts=str(millis_time))
+        insert_new_word(word, millis_time, user_id)
     else:
         insert_new_word(word, millis_time, user_id)
 
