@@ -29,7 +29,7 @@ def add_historical_goodwords():
 def process_event(event: object):
     if event.get('text', False) and event.get('ts', False) and event.get('user', False):
         if event.get('thread_ts', False):
-            print(f"Replies to posts not accepted. Received: {event}")
+            print(f"Replies to posts not accepted.")
             return
         message = event['text']
         millis_time = float(event['ts'])
