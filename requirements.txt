@@ -8,7 +8,7 @@ fastapi==0.100.0
 h11==0.14.0
 httpcore==0.17.3
 idna==3.4
-pandas=2.0.3
+pandas==2.0.3
 pydantic==2.0.3
 pydantic_core==2.3.0
 pymongo==4.4.1
