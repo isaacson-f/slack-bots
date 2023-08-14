@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from fastapi import FastAPI, status, Response
 from goodwords_service import add_historical_goodwords, process_event
+from leetcode_service import post_daily_leetcode
 from pydantic import BaseModel
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -31,6 +32,10 @@ async def root(req: HistoricalChannel, response: Response):
         add_historical_goodwords()
     else:
         response.status_code = 404
+
+@app.get("/leetcode/blind-75")
+async def root():
+    post_daily_leetcode()
     
 
 @app.post("/slack/events")
