@@ -10,7 +10,7 @@ with open('active_brothers.csv', 'r') as brothers:
         brother_object = {}
         new_details = brother_list[i].split(',')
         for i in range(len(new_details)):
-            new_details[i].strip()
+            new_details[i] = new_details[i].strip()
             new_details[i] = new_details[i].lower()
             if i == 5:
                 datetime_object = datetime.strptime(new_details[i], '%m/%d/%y')
