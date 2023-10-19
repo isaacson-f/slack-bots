@@ -22,7 +22,11 @@ def insert_all_brothers_in_db():
             if filter_object:
                 name = element["data-name"]
                 name_list = list(filter(lambda a: len(a) > 0, name.split(' ')))
-                doc = brothers_collection.find_one({"lastName": name_list[1].lower().strip()})
+                # first look for matching first and last names
+                doc = brothers_collection.find_one({"lastName": name_list[1].lower().strip(), "firstName": name_list[0].lower().strip()})
+                # if there is nothing found (due to nicknames etc.) check for just last name
+                if not doc:
+                     doc = brothers_collection.find_one({"lastName": name_list[1].lower().strip()})
                 if len(name_list) > 2:
                      doc = brothers_collection.find_one({"firstName": name_list[0].lower().strip()})
                 if not doc is None:
