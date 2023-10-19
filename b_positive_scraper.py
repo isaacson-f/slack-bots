@@ -119,9 +119,6 @@ def send_donation_update(leaderboard):
     client.chat_postMessage(channel="C0431QCLX18", text=message)
 
 
-
-insert_all_brothers_in_db()
-
 # Nick -> Nicholas
 # Gabriel -> gabe
 
