@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from fastapi import FastAPI, status, Response
 from goodwords_service import add_historical_goodwords, process_event
 from leetcode_service import post_daily_leetcode
+from b_positive_scraper import update_donations, find_current_donations
 from pydantic import BaseModel
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -49,5 +50,14 @@ async def root(req: dict[str, object], resp: Response):
         resp.status_code = 400
         print(f"Event missing attribute: {req}")
 
+
+@app.get("/b-positive/weekly-update")
+async def root():
+    find_current_donations()
+
+
+@app.get("/b-positive/update-donations")
+async def root():
+    update_donations()
 
 
