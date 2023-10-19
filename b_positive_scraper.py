@@ -56,9 +56,12 @@ def update_donations():
         if filter_object:
             name = element["data-name"]
             name_list = list(filter(lambda a: len(a) > 0, name.split(' ')))
-            doc = brothers_collection.find_one({"lastName": name_list[1].lower().strip()})
+            doc = brothers_collection.find_one({"lastName": name_list[1].lower().strip(), "firstName": name_list[0].lower().strip()})
+                # if there is nothing found (due to nicknames etc.) check for just last name
+            if not doc:
+                doc = brothers_collection.find_one({"lastName": name_list[1].lower().strip()})
             if len(name_list) > 2:
-                    doc = brothers_collection.find_one({"firstName": name_list[0].lower().strip()})
+                doc = brothers_collection.find_one({"firstName": name_list[0].lower().strip()})
             if not doc is None:
                 b_positive_profile = b_positive_collection.find_one({"brother_email":doc["email"]})
                 raised_diff = float(element["data-donation-amount"]) - b_positive_profile["total_money_raised"]
@@ -117,7 +120,7 @@ def send_donation_update(leaderboard):
 
 
 
-
+insert_all_brothers_in_db()
 
 # Nick -> Nicholas
 # Gabriel -> gabe
