@@ -100,6 +100,7 @@ def find_current_donations():
     end_index = len(b_positive_profiles)-1
     leaderboard["last_all_time"], leaderboard["second_last_all_time"], leaderboard["third_last_all_time"] = b_positive_profiles[end_index], b_positive_profiles[end_index-1], b_positive_profiles[end_index-2]
     b_positive_profiles.sort(key=lambda a: float(a["cur_sem_raised"]), reverse=True)
+    print(b_positive_profiles[:3])
     leaderboard["first_cur_sem"], leaderboard["second_cur_sem"], leaderboard["third_cur_sem"] = b_positive_profiles[0], b_positive_profiles[1], b_positive_profiles[3]
     leaderboard["last_cur_sem"], leaderboard["second_last_cur_sem"], leaderboard["third_last_cur_sem"] = b_positive_profiles[end_index], b_positive_profiles[end_index-1], b_positive_profiles[end_index-2]
     send_donation_update(leaderboard)
@@ -121,5 +122,4 @@ def send_donation_update(leaderboard):
 
 # Nick -> Nicholas
 # Gabriel -> gabe
-
 
