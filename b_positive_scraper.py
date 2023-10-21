@@ -96,12 +96,12 @@ def find_current_donations():
          if profile["total_money_raised"] == 0:
               leaderboard["shame_list"].append(profile)
     b_positive_profiles.sort(key=lambda a: float(a["total_money_raised"]), reverse=True)
-    leaderboard["first_all_time"], leaderboard["second_all_time"], leaderboard["third_all_time"] = b_positive_profiles[0], b_positive_profiles[1], b_positive_profiles[3]
+    leaderboard["first_all_time"], leaderboard["second_all_time"], leaderboard["third_all_time"] = b_positive_profiles[0], b_positive_profiles[1], b_positive_profiles[2]
     end_index = len(b_positive_profiles)-1
     leaderboard["last_all_time"], leaderboard["second_last_all_time"], leaderboard["third_last_all_time"] = b_positive_profiles[end_index], b_positive_profiles[end_index-1], b_positive_profiles[end_index-2]
     b_positive_profiles.sort(key=lambda a: float(a["cur_sem_raised"]), reverse=True)
     print(b_positive_profiles[:3])
-    leaderboard["first_cur_sem"], leaderboard["second_cur_sem"], leaderboard["third_cur_sem"] = b_positive_profiles[0], b_positive_profiles[1], b_positive_profiles[3]
+    leaderboard["first_cur_sem"], leaderboard["second_cur_sem"], leaderboard["third_cur_sem"] = b_positive_profiles[0], b_positive_profiles[1], b_positive_profiles[2]
     leaderboard["last_cur_sem"], leaderboard["second_last_cur_sem"], leaderboard["third_last_cur_sem"] = b_positive_profiles[end_index], b_positive_profiles[end_index-1], b_positive_profiles[end_index-2]
     send_donation_update(leaderboard)
 
