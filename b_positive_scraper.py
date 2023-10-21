@@ -107,7 +107,7 @@ def find_current_donations():
 
 def send_donation_update(leaderboard):
     all_time_leaders = (leaderboard['first_all_time'], leaderboard['second_all_time'], leaderboard['third_all_time'])
-    current_sem_leaders = (leaderboard['first_cur_sem'], leaderboard['second_cur_sem'], leaderboard['third_cur_sem'])
+    current_sem_leaders = (leaderboard['first_cur_sem'], leaderboard['second_cur_sem'], leaderboard['third_cur_sem'], leaderboard['fourth_cur_sem'], leaderboard['fifth_cur_sem'])
     shame_message = ":( \bBrothers with zero dollars donated -"
     for profile in leaderboard["shame_list"]:
          shame_message += f" {profile['first_name'].title()} {profile['last_name'].title()},"
