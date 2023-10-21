@@ -101,7 +101,7 @@ def find_current_donations():
     leaderboard["last_all_time"], leaderboard["second_last_all_time"], leaderboard["third_last_all_time"] = b_positive_profiles[end_index], b_positive_profiles[end_index-1], b_positive_profiles[end_index-2]
     b_positive_profiles.sort(key=lambda a: float(a["cur_sem_raised"]), reverse=True)
     print(b_positive_profiles[:3])
-    leaderboard["first_cur_sem"], leaderboard["second_cur_sem"], leaderboard["third_cur_sem"] = b_positive_profiles[0], b_positive_profiles[1], b_positive_profiles[2]
+    leaderboard["first_cur_sem"], leaderboard["second_cur_sem"], leaderboard["third_cur_sem"], leaderboard["fourth_cur_sem"], leaderboard["fifth_cur_sem"]= b_positive_profiles[0], b_positive_profiles[1], b_positive_profiles[2], b_positive_profiles[3], b_positive_profiles[4]
     leaderboard["last_cur_sem"], leaderboard["second_last_cur_sem"], leaderboard["third_last_cur_sem"] = b_positive_profiles[end_index], b_positive_profiles[end_index-1], b_positive_profiles[end_index-2]
     send_donation_update(leaderboard)
 
@@ -112,8 +112,9 @@ def send_donation_update(leaderboard):
     for profile in leaderboard["shame_list"]:
          shame_message += f" {profile['first_name'].title()} {profile['last_name'].title()},"
     shame_message = shame_message[:-1]
+
     message = f"B+ Fundraising Update! \n All Time Leaders: \n 1st - {all_time_leaders[0]['first_name'].title()} {all_time_leaders[0]['last_name'].title()[0]} with ${all_time_leaders[0]['total_money_raised']} raised \n 2nd - {all_time_leaders[1]['first_name'].title()} {all_time_leaders[1]['last_name'].title()[0]} with ${all_time_leaders[1]['total_money_raised']} raised \n 3rd - {all_time_leaders[2]['first_name'].title()} {all_time_leaders[2]['last_name'].title()[0]} with ${all_time_leaders[2]['total_money_raised']} raised \n"
-    least_raised = f"Current Sem Leaders \n 1st - {current_sem_leaders[0]['first_name'].title()} {current_sem_leaders[0]['last_name'].title()[0]} with ${current_sem_leaders[0]['cur_sem_raised']} raised \n 2nd - {current_sem_leaders[1]['first_name'].title()} {current_sem_leaders[1]['last_name'].title()[0]} with ${current_sem_leaders[1]['cur_sem_raised']} raised \n 3rd - {current_sem_leaders[2]['first_name'].title()} {current_sem_leaders[2]['last_name'].title()[0]} with ${current_sem_leaders[2]['cur_sem_raised']} raised \n LFG :fire:"
+    least_raised = f"Current Sem Leaders \n 1st - {current_sem_leaders[0]['first_name'].title()} {current_sem_leaders[0]['last_name'].title()[0]} with ${current_sem_leaders[0]['cur_sem_raised']} raised \n 2nd - {current_sem_leaders[1]['first_name'].title()} {current_sem_leaders[1]['last_name'].title()[0]} with ${current_sem_leaders[1]['cur_sem_raised']} raised \n 3rd - {current_sem_leaders[2]['first_name'].title()} {current_sem_leaders[2]['last_name'].title()[0]} with ${current_sem_leaders[2]['cur_sem_raised']} raised \n 4th - {current_sem_leaders[3]['first_name'].title()} {current_sem_leaders[3]['last_name'].title()[0]} with ${current_sem_leaders[3]['cur_sem_raised']} raised\n 5th - {current_sem_leaders[4]['first_name'].title()} {current_sem_leaders[4]['last_name'].title()[0]} with ${current_sem_leaders[4]['cur_sem_raised']} raised \nLFG :fire:"
     message += least_raised
     #message += shame_message
 
