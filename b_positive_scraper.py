@@ -63,14 +63,25 @@ def update_donations():
             if len(name_list) > 2:
                 doc = brothers_collection.find_one({"firstName": name_list[0].lower().strip()})
             if not doc is None:
-                b_positive_profile = b_positive_collection.find_one({"brother_email":doc["email"]})
+                print(f"LOOKING FOR {doc['email']}")
+                b_positive_profile = b_positive_collection.find_one({"brother_email": doc["email"]})
+                if b_positive_profile is None:
+                    print(f"COULD NOT FIND {doc['email']}, INSERTING INTO B+ DB")
+                    b_positive_profile = {}
+                    b_positive_profile["brother_email"] = doc["email"]
+                    b_positive_profile["total_money_raised"] = float(element["data-donation-amount"])
+                    b_positive_profile["periodical_money_raised"] = {"fall_2023": 0}
+                    b_positive_profile["last_donation"] = datetime(2023,10,1)
+                    print(f"INSERTING: {b_positive_profile}")
+                    b_positive_collection.insert_one(b_positive_profile)
                 raised_diff = float(element["data-donation-amount"]) - b_positive_profile["total_money_raised"]
+                b_positive_profile["total_money_raised"] = float(element["data-donation-amount"])
                 if raised_diff > 0:
                     cur_amount = b_positive_profile["periodical_money_raised"]["fall_2023"]
                     b_positive_profile["periodical_money_raised"]["fall_2023"] = cur_amount + raised_diff
                     b_positive_profile["last_donation"] = datetime.today()
-                    print(f"{doc['firstName']} {doc['lastName']} RAISED {cur_amount} THE WEEK OF {datetime.today()}")
                     b_positive_collection.replace_one({"brother_email": doc["email"]}, b_positive_profile)
+                    print(f"{doc['firstName']} {doc['lastName']} RAISED {cur_amount} THE WEEK OF {datetime.today()}")
                 else:
                     print(f"{doc['firstName']} {doc['lastName']} DID NOT RAISE ANY MONEY THE WEEK OF {datetime.today()}")
             elif doc is None:
@@ -123,4 +134,3 @@ def send_donation_update(leaderboard):
 
 # Nick -> Nicholas
 # Gabriel -> gabe
-
