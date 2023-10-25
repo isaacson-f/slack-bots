@@ -4,11 +4,13 @@ from bs4 import BeautifulSoup
 import requests
 from slack_sdk import WebClient
 
-from mongo_client import get_beta_members, get_b_positive_collection
+from mongo_client import get_beta_members, get_b_positive_collection, get_beta_slack
 
 brothers_collection = get_beta_members()
 
 b_positive_collection = get_b_positive_collection()
+
+slack_collection = get_beta_slack()
 
 client = WebClient(token=os.environ.get("SLACK_TOKEN"))
 
@@ -85,14 +87,26 @@ def update_donations():
                 else:
                     print(f"{doc['firstName']} {doc['lastName']} DID NOT RAISE ANY MONEY THE WEEK OF {datetime.today()}")
             elif doc is None:
-                print(f'NAME: {name_list}')
+                print(f'NAME: {name_list[1].lower()}')
                 print(f'AMOUNT: {element["data-donation-amount"]}')
+                new_doc = slack_collection.find_one({"lastName": name_list[1].lower()})
+                if new_doc:
+                    b_positive_profile = {}
+                    b_positive_profile["brother_email"] = new_doc["email"]
+                    b_positive_profile["total_money_raised"] = float(element["data-donation-amount"])
+                    b_positive_profile["periodical_money_raised"] = {"fall_2023": float(element["data-donation-amount"])}
+                    b_positive_profile["last_donation"] = datetime.today()
+                    print(f"INSERTING: {b_positive_profile}")
+                    b_positive_collection.insert_one(b_positive_profile)
+
 
 def find_current_donations():
     profiles = b_positive_collection.find()
     b_positive_profiles = []
     for profile in profiles:
         doc = brothers_collection.find_one({"email": profile["brother_email"]})
+        if not doc:
+            doc = slack_collection.find_one({"email": profile["brother_email"]})
         cur_dict = {
               "first_name": doc["firstName"],
               "last_name": doc["lastName"],
@@ -134,3 +148,5 @@ def send_donation_update(leaderboard):
 
 # Nick -> Nicholas
 # Gabriel -> gabe
+
+find_current_donations()

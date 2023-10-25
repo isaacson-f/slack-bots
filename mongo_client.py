@@ -28,6 +28,11 @@ def get_beta_members():
     beta_profiles = beta_members['profiles']
     return beta_profiles
 
+def get_beta_slack():
+    beta_members = client['brothers']
+    beta_profiles = beta_members['slack']
+    return beta_profiles
+
 def get_b_positive_collection():
     beta_members = client['brothers']
     b_positive_profiles = beta_members['b_positive_donations']
