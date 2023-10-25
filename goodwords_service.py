@@ -34,8 +34,9 @@ def process_event(event: object):
         message = event['text']
         millis_time = float(event['ts'])
         user = event['user']
+        channel = event['channel']
         temp_list = list(filter(lambda a: len(a) > 0, message.split(" ")))
-        if len(temp_list) > 1:
+        if len(temp_list) > 1 or channel != "C0441R6SKBN":
             print(f"invalid submission: {temp_list}")
         else: 
             handle_word_sent(temp_list[0], millis_time, user)
