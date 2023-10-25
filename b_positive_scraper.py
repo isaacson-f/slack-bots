@@ -64,6 +64,9 @@ def update_donations():
                 doc = brothers_collection.find_one({"lastName": name_list[1].lower().strip()})
             if len(name_list) > 2:
                 doc = brothers_collection.find_one({"firstName": name_list[0].lower().strip()})
+            elif doc is None:
+                print(f'LOOKING FOR: {name_list[1].lower()} ON SLACK')
+                doc = slack_collection.find_one({"lastName": name_list[1].lower()})
             if not doc is None:
                 print(f"LOOKING FOR {doc['email']}")
                 b_positive_profile = b_positive_collection.find_one({"brother_email": doc["email"]})
@@ -72,8 +75,8 @@ def update_donations():
                     b_positive_profile = {}
                     b_positive_profile["brother_email"] = doc["email"]
                     b_positive_profile["total_money_raised"] = float(element["data-donation-amount"])
-                    b_positive_profile["periodical_money_raised"] = {"fall_2023": 0}
-                    b_positive_profile["last_donation"] = datetime(2023,10,1)
+                    b_positive_profile["periodical_money_raised"] = {"fall_2023": float(element["data-donation-amount"])}
+                    b_positive_profile["last_donation"] = datetime.today()
                     print(f"INSERTING: {b_positive_profile}")
                     b_positive_collection.insert_one(b_positive_profile)
                 raised_diff = float(element["data-donation-amount"]) - b_positive_profile["total_money_raised"]
@@ -89,15 +92,6 @@ def update_donations():
             elif doc is None:
                 print(f'NAME: {name_list[1].lower()}')
                 print(f'AMOUNT: {element["data-donation-amount"]}')
-                new_doc = slack_collection.find_one({"lastName": name_list[1].lower()})
-                if new_doc:
-                    b_positive_profile = {}
-                    b_positive_profile["brother_email"] = new_doc["email"]
-                    b_positive_profile["total_money_raised"] = float(element["data-donation-amount"])
-                    b_positive_profile["periodical_money_raised"] = {"fall_2023": float(element["data-donation-amount"])}
-                    b_positive_profile["last_donation"] = datetime.today()
-                    print(f"INSERTING: {b_positive_profile}")
-                    b_positive_collection.insert_one(b_positive_profile)
 
 
 def find_current_donations():
