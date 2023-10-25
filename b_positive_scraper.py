@@ -47,8 +47,7 @@ def insert_all_brothers_in_db():
                     print(f'NAME: {name_list}')
                     print(f'AMOUNT: {element["data-donation-amount"]}')
 
-
-def update_donations():
+def update_donations(single_update):
     html_page = requests.get(os.environ.get("B_POSITIVE_URL"))
     soup = BeautifulSoup(html_page.text, 'html.parser')
     donation_list = soup.findAll('ul')
@@ -81,7 +80,12 @@ def update_donations():
                     b_positive_collection.insert_one(b_positive_profile)
                 raised_diff = float(element["data-donation-amount"]) - b_positive_profile["total_money_raised"]
                 b_positive_profile["total_money_raised"] = float(element["data-donation-amount"])
-                if raised_diff > 0:
+                if single_update and raised_diff >= 100:
+                    first_name = name_list[0]
+                    last_initial = name_list[1][0]
+                    client.chat_postMessage(channel="C0431QCLX18", text=f"FUCK YEAH HUGE DONATION OF {raised_diff} TO {first_name} {last_initial}.")
+
+                if raised_diff > 0 and not single_update:
                     cur_amount = b_positive_profile["periodical_money_raised"]["fall_2023"]
                     b_positive_profile["periodical_money_raised"]["fall_2023"] = cur_amount + raised_diff
                     b_positive_profile["last_donation"] = datetime.today()

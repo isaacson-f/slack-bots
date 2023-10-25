@@ -58,6 +58,10 @@ async def root():
 
 @app.get("/b-positive/update-donations")
 async def root():
-    update_donations()
+    update_donations(single_update=False)
+
+@app.get("/b-positive/refresh-consistent")
+async def root():
+    update_donations(single_update=True)
 
 
