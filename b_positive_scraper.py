@@ -148,5 +148,3 @@ def send_donation_update(leaderboard):
 
 # Nick -> Nicholas
 # Gabriel -> gabe
-
-find_current_donations()
