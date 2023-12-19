@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 import mongo_client
 from typing import Optional, List, Union
 
-
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
