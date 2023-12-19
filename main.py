@@ -69,5 +69,6 @@ async def root():
 async def root(req: dict[str, object], resp: Response):
     print(req)
     resp.status_code = 200
+    resp.data = req["token"]
 
 
