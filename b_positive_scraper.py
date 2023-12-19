@@ -97,6 +97,12 @@ def update_donations(single_update):
                 print(f'NAME: {name_list[1].lower()}')
                 print(f'AMOUNT: {element["data-donation-amount"]}')
 
+def find_total_sem_donations():
+    profiles = b_positive_collection.find()
+    current_total = 0
+    for profile in profiles:
+        current_total += profile["periodical_money_raised"]["fall_2023"]
+    print(current_total)
 
 def find_current_donations():
     profiles = b_positive_collection.find()
@@ -146,3 +152,5 @@ def send_donation_update(leaderboard):
 
 # Nick -> Nicholas
 # Gabriel -> gabe
+#update_donations(False)
+find_total_sem_donations()
