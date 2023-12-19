@@ -69,6 +69,7 @@ async def root():
 async def root(req: dict[str, object], resp: Response):
     print(req)
     if req['type'] == 1:
-        return {'type':'1'}
+        print('Health check discord')
+        return {'type':1}
 
 
