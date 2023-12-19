@@ -13,6 +13,9 @@ import mongo_client
 from typing import Optional, List, Union
 
 
+from nacl.signing import VerifyKey
+from nacl.exceptions import BadSignatureError
+
 load_dotenv()
 
 app = FastAPI()
@@ -67,9 +70,23 @@ async def root():
 
 @app.post("/discord/interactions")
 async def root(req: dict[str, object], resp: Response):
-    print(req)
-    if req['type'] == 1:
-        print('Health check discord')
-        return {'type':1}
+    # Your public key can be found on your application in the Developer Portal
+    PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
+
+    verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
+
+    signature = req.headers["X-Signature-Ed25519"]
+    timestamp = req.headers["X-Signature-Timestamp"]
+    body = req.data.decode("utf-8")
+
+    try:
+        verify_key.verify(f'{timestamp}{body}'.encode(), bytes.fromhex(signature))
+        print(req)
+        if req['type'] == 1:
+            print('Health check discord')
+            return {'type':1}
+    except BadSignatureError:
+        resp.status = 401
+
 
 
