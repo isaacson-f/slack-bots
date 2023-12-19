@@ -65,8 +65,9 @@ async def root():
     update_donations(single_update=True)
 
 
-@app.post("/discord-messages")
+@app.post("/discord-message")
 async def root(req: dict[str, object], resp: Response):
     print(req)
+    resp.status_code = 200
 
 
