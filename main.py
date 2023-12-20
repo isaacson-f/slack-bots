@@ -77,12 +77,12 @@ async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
     print(f'params: {req.query_params}')
     timestamp = req.headers['X-Signature-Timestamp']
     body = await req.body()
-    print(body.decode("utf-8"))
+    new_body = body.decode("utf-8")
     
     print('Verifying')
     print(f'{timestamp}{req_body}')
     try:
-        verify_key.verify(f'{timestamp}{body}'.encode(), bytes.fromhex(signature))
+        verify_key.verify(f'{timestamp}{new_body}'.encode(), bytes.fromhex(signature))
         if req_body['type'] == 1:
            print('Health check discord')
            resp.status_code = 200
