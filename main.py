@@ -10,7 +10,7 @@ import logging
 import os
 from dotenv import load_dotenv
 import mongo_client
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Dict
 
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
@@ -42,7 +42,7 @@ async def root():
     
 
 @app.post("/slack/events")
-async def root(req: 'dict[str, object]', resp: Response):
+async def root(req: Dict[str, object], resp: Response):
     if req.get('challenge', False):
         return req['challenge']
     elif req.get('event', False):
@@ -68,14 +68,16 @@ async def root():
 
 
 @app.post("/discord/interactions")
-async def root(req: Request, req_body,resp: Response):
+async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
     # Your public key can be found on your application in the Developer Portal
     PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
 
     signature = req.headers["X-Signature-Ed25519"]
+    print(signature)
     timestamp = req.headers["X-Signature-Timestamp"]
-    print(f"{req_body.decode('utf_8')}")
+    print(timestamp)
+    print(f"{req_body}")
     try:
         verify_key.verify(f'{timestamp}{req_body}'.encode(), bytes.fromhex(signature))
         print(req_body)
