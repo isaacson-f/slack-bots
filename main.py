@@ -11,6 +11,7 @@ import os
 from dotenv import load_dotenv
 import mongo_client
 from typing import Optional, List, Union, Dict
+import json
 
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
@@ -86,10 +87,11 @@ async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
         if req_body['type'] == 1:
            print('Health check discord')
            resp.status_code = 200
-           resp.body = {'type':1}
+           resp.body = json.dumps({'type':1})
            return resp
     except BadSignatureError:
         resp.status_code = 401
+        return resp
         
 
 
