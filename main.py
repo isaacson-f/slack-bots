@@ -75,8 +75,10 @@ async def root(req: Request, resp: Response):
 
     signature = req.headers["X-Signature-Ed25519"]
     timestamp = req.headers["X-Signature-Timestamp"]
+    print(req.__str__)
+    print(req.get('type'))
     body = req.json()
-    print(body)
+    print(body.send())
 
     try:
         verify_key.verify(f'{timestamp}{body}'.encode(), bytes.fromhex(signature))
