@@ -68,22 +68,19 @@ async def root():
 
 
 @app.post("/discord/interactions")
-async def root(req: Request, resp: Response):
+async def root(req: Request, req_body: 'dict[str, object]',resp: Response):
     # Your public key can be found on your application in the Developer Portal
     PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
 
     signature = req.headers["X-Signature-Ed25519"]
     timestamp = req.headers["X-Signature-Timestamp"]
-    print(req.__str__)
-    print(req.get('type'))
-    body = req.json()
-    print(body.send())
+    print(req_body)
 
     try:
-        verify_key.verify(f'{timestamp}{body}'.encode(), bytes.fromhex(signature))
-        print(body)
-        if body['type'] == 1:
+        verify_key.verify(f'{timestamp}{req_body}'.encode(), bytes.fromhex(signature))
+        print(req_body)
+        if req_body['type'] == 1:
             print('Health check discord')
             return {'type':1}
     except BadSignatureError:
