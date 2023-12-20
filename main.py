@@ -24,24 +24,24 @@ logger = logging.getLogger(__name__)
 class HistoricalChannel(BaseModel):
     channel_id: str
 
-@app.get("/")
+@app.get('/')
 async def root():
-    return ''
+    return ""
 
 
-@app.post("/history", status_code=201)
+@app.post('/history', status_code=201)
 async def root(req: HistoricalChannel, response: Response):
-    if req.channel_id == "C0441R6SKBN":
+    if req.channel_id == 'C0441R6SKBN':
         add_historical_goodwords()
     else:
         response.status_code = 404
 
-@app.get("/leetcode/blind-75")
+@app.get('/leetcode/blind-75')
 async def root():
     post_daily_leetcode()
     
 
-@app.post("/slack/events")
+@app.post('/slack/events')
 async def root(req: Dict[str, object], resp: Response):
     if req.get('challenge', False):
         return req['challenge']
@@ -50,42 +50,40 @@ async def root(req: Dict[str, object], resp: Response):
         process_event(req.get('event'))
     else:
         resp.status_code = 400
-        print(f"Event missing attribute: {req}")
+        print(f'Event missing attribute: {req}')
 
 
-@app.get("/b-positive/weekly-update")
+@app.get('/b-positive/weekly-update')
 async def root():
     find_current_donations()
 
 
-@app.get("/b-positive/update-donations")
+@app.get('/b-positive/update-donations')
 async def root():
     update_donations(single_update=False)
 
-@app.get("/b-positive/refresh-consistent")
+@app.get('/b-positive/refresh-consistent')
 async def root():
     update_donations(single_update=True)
 
 
-@app.post("/discord/interactions")
+@app.post('/discord/interactions')
 async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
     # Your public key can be found on your application in the Developer Portal
     PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
 
-    signature = req.headers["X-Signature-Ed25519"]
-    print(signature)
-    timestamp = req.headers["X-Signature-Timestamp"]
-    print(timestamp)
-    print(f"{req_body}")
-    try:
-        verify_key.verify(f'{timestamp}{req_body}'.encode(), bytes.fromhex(signature))
-        print(req_body)
-        if req_body['type'] == 1:
-            print('Health check discord')
-            return {'type':1}
-    except BadSignatureError:
-        resp.status = 401
+    signature = req.headers['X-Signature-Ed25519']
+    print(f'params: {req.query_params}')
+    timestamp = req.headers['X-Signature-Timestamp']
+    print(req.stream())
+    print('Verifying')
+    print(f'{timestamp}{req_body}')
+    verify_key.verify(f'{timestamp}{req_body}'.encode(), bytes.fromhex(signature))
+    if req_body['type'] == 1:
+        print('Health check discord')
+        return {'type':1}
+    print(f"Verfying: verify_key.verify(f'{timestamp}{req_body}'.encode(), bytes.fromhex(signature))")
 
 
 
