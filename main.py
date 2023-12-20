@@ -71,12 +71,12 @@ async def root():
 async def root(req: Request, resp: Response):
     # Your public key can be found on your application in the Developer Portal
     PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
-    print(req)
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
 
     signature = req.headers["X-Signature-Ed25519"]
     timestamp = req.headers["X-Signature-Timestamp"]
-    body = req.data.decode("utf-8")
+    body = req.json()
+    print(body)
 
     try:
         verify_key.verify(f'{timestamp}{body}'.encode(), bytes.fromhex(signature))
