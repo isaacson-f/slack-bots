@@ -86,7 +86,10 @@ async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
         verify_key.verify(f'{timestamp}{new_body}'.encode(), bytes.fromhex(signature))
         if req_body['type'] == 1:
            print('Health check discord')
-           resp.status_code = 204
+           resp.status_code = 200
+           resp.body = str({'type':1, 'data' : {
+               'content': 'Hello world',
+           }}).encode()
            return resp
     except BadSignatureError:
         resp.status_code = 401
