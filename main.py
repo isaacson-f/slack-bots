@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from fastapi import FastAPI, status, Response
+from fastapi import FastAPI, status, Response, Request
 from goodwords_service import add_historical_goodwords, process_event
 from leetcode_service import post_daily_leetcode
 from b_positive_scraper import update_donations, find_current_donations
@@ -42,7 +42,7 @@ async def root():
     
 
 @app.post("/slack/events")
-async def root(req: dict[str, object], resp: Response):
+async def root(req: 'dict[str, object]', resp: Response):
     if req.get('challenge', False):
         return req['challenge']
     elif req.get('event', False):
@@ -68,10 +68,10 @@ async def root():
 
 
 @app.post("/discord/interactions")
-async def root(req: dict[str, object], resp: Response):
+async def root(req: Request, resp: Response):
     # Your public key can be found on your application in the Developer Portal
     PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
-
+    print(req)
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
 
     signature = req.headers["X-Signature-Ed25519"]
@@ -80,8 +80,8 @@ async def root(req: dict[str, object], resp: Response):
 
     try:
         verify_key.verify(f'{timestamp}{body}'.encode(), bytes.fromhex(signature))
-        print(req)
-        if req['type'] == 1:
+        print(body)
+        if body['type'] == 1:
             print('Health check discord')
             return {'type':1}
     except BadSignatureError:
