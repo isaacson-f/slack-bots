@@ -1,0 +1,18 @@
+type: 'python:3.8'
+
+dependencies:
+    python3:
+        pipenv: "2022.12.19"
+
+
+hooks:
+    build: |
+        set -eu
+        pipenv install --system --deploy   
+
+    web:
+        # Start your app with the configuration you define
+        # You can replace the file location with your location
+        commands:
+            start: uvicorn main:app
+
