@@ -11,4 +11,5 @@ hooks:
         set -eu 
         pip install -r requirements.txt
 web:
-    command: "uvicorn main:app"
+    commands: 
+        start: "uvicorn main:app --workers 4"
