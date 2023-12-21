@@ -91,7 +91,7 @@ async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
            return resp
     except BadSignatureError:
         resp.status_code = 401
-        resp.body = 'invalid request signature'
+        resp.body = 'invalid request signature'.encode()
         return resp
         
 
