@@ -11,7 +11,4 @@ hooks:
         set -eu 
         pip install -r requirements.txt
 web:
-    locations:
-        "/":
-            # The command to start your application using uvicorn
-            command: "uvicorn main:app"
+    command: "uvicorn main:app"
