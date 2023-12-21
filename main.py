@@ -73,6 +73,7 @@ async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
     # Your public key can be found on your application in the Developer Portal
     PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
+    print('CALLED CALED')
 
     signature = req.headers['X-Signature-Ed25519']
     print(f'params: {req.query_params}')
