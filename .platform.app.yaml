@@ -11,7 +11,7 @@ hooks:
         set -eu 
         pip install -r requirements.txt
 
-web:
-    commands:
-            start: uvicorn main:app
+    web:
+        commands:
+                start: uvicorn main:app
 
