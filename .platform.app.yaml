@@ -10,8 +10,7 @@ hooks:
     build: |
         set -eu 
         pip install -r requirements.txt
-
-    web:
+    web: |
         commands:
                 start: uvicorn main:app
 
