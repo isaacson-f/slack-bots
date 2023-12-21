@@ -1,4 +1,4 @@
-type: 'python:3.7.9'
+type: 'python:3.8'
 name: app
 
 dependencies:
