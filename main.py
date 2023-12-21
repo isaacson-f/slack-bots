@@ -87,10 +87,11 @@ async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
         if req_body['type'] == 1:
            print('Health check discord')
            resp.status_code = 200
-           resp.body = json.dumps({'type':1}).encode()
+           resp.body = json.dumps({'type':1, "data":{"content": "Discord Health Check"}}).encode()
            return resp
     except BadSignatureError:
         resp.status_code = 401
+        resp.body = 'invalid request signature'
         return resp
         
 
