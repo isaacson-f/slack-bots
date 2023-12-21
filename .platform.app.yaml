@@ -7,8 +7,8 @@ dependencies:
 
 hooks:
     build: |
-        set -eu
-        pipenv install --system --deploy   
+        set -eu 
+        pip install -r requirements.txt
 
     web:
         # Start your app with the configuration you define
