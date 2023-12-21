@@ -14,4 +14,4 @@ web:
     locations:
         "/":
             # The command to start your application using uvicorn
-            upstream: "uvicorn main:app"
+            command: "uvicorn main:app"
