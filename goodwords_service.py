@@ -36,12 +36,17 @@ def process_event(event: object):
         user = event['user']
         channel = event['channel']
         temp_list = list(filter(lambda a: len(a) > 0, message.split(" ")))
-        if len(temp_list) > 1 or channel != "C0441R6SKBN":
+        if len(temp_list) > 1 or channel != "C0441R6SKBN" and channel != "C06B6R5BC12":
             print(f"invalid submission: {temp_list}")
+        elif channel == "C06B6R5BC12":
+            handle_note_added(message)
         else: 
             handle_word_sent(temp_list[0], millis_time, user)
     else:
         print(f"Event missing attribute ts or text: {event}")
+
+def handle_note_added(note):
+    print(note)
 
 def handle_word_sent(word: str, millis_time: float, user_id: str, historical: bool=False):
     prev_sent = find_word(word)
