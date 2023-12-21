@@ -10,7 +10,8 @@ hooks:
     build: |
         set -eu 
         pip install -r requirements.txt
-    web: |
-        commands:
-                start: uvicorn main:app
-
+web:
+    locations:
+        "/":
+            # The command to start your application using uvicorn
+            upstream: "uvicorn main:app"
