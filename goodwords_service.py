@@ -35,8 +35,9 @@ def process_event(event: object):
         millis_time = float(event['ts'])
         user = event['user']
         channel = event['channel']
+        channel_type = event['channel_type']
         temp_list = list(filter(lambda a: len(a) > 0, message.split(" ")))
-        if channel == "C06B6R5BC12":
+        if channel_type == "im":
             handle_note_added(message)
         elif channel == "C0441R6SKBN" and len(temp_list) == 1: 
             handle_word_sent(temp_list[0], millis_time, user)
