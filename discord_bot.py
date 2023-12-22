@@ -17,7 +17,7 @@ class DiscordClient:
             await message.channel.send('new note added')
 
 
-    client.run(discord_token)
+    #client.run(discord_token)
 
     @client.event
     async def close(client):
