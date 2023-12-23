@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import os
 from fastapi import FastAPI, status, Response, Request
 from goodwords_service import add_historical_goodwords, process_event
 from leetcode_service import post_daily_leetcode
@@ -11,6 +12,9 @@ from dotenv import load_dotenv
 import mongo_client
 from typing import Optional, List, Union, Dict
 import json
+
+from nacl.signing import VerifyKey
+from nacl.exceptions import BadSignatureError
 
 # from nacl.signing import VerifyKey
 # from nacl.exceptions import BadSignatureError
@@ -67,32 +71,32 @@ async def root():
     update_donations(single_update=True)
 
 
-# @app.post('/discord/interactions')
-# async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
-#     # Your public key can be found on your application in the Developer Portal
-#     PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
-#     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
-#     print('CALLED CALED')
+@app.post('/discord/interactions')
+async def root(req: Request, req_body: Dict[str, object] ,resp: Response):
+    # Your public key can be found on your application in the Developer Portal
+    PUBLIC_KEY = os.environ['DISCORD_PUBLIC_KEY']
+    verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
+    print('CALLED CALED')
 
-#     signature = req.headers['X-Signature-Ed25519']
-#     print(f'params: {req.query_params}')
-#     timestamp = req.headers['X-Signature-Timestamp']
-#     body = await req.body()
-#     new_body = body.decode("utf-8")
+    signature = req.headers['X-Signature-Ed25519']
+    print(f'params: {req.query_params}')
+    timestamp = req.headers['X-Signature-Timestamp']
+    body = await req.body()
+    new_body = body.decode("utf-8")
     
-#     print('Verifying')
-#     print(f'{timestamp}{req_body}')
-#     try:
-#         verify_key.verify(f'{timestamp}{new_body}'.encode(), bytes.fromhex(signature))
-#         if req_body['type'] == 1:
-#            print('Health check discord')
-#            resp.status_code = 200
-#            resp.body = json.dumps({'type':1, "data":{"content": "Discord Health Check"}}).encode()
-#            return resp
-#     except BadSignatureError:
-#         resp.status_code = 401
-#         resp.body = 'invalid request signature'.encode()
-#         return resp
+    print('Verifying')
+    print(f'{timestamp}{req_body}')
+    try:
+        verify_key.verify(f'{timestamp}{new_body}'.encode(), bytes.fromhex(signature))
+        if req_body['type'] == 1:
+           print('Health check discord')
+           resp.status_code = 200
+           resp.body = json.dumps({'type':1, "data":{"content": "Discord Health Check"}}).encode()
+           return resp
+    except BadSignatureError:
+        resp.status_code = 401
+        resp.body = 'invalid request signature'.encode()
+        return resp
         
 
 
