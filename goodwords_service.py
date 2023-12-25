@@ -54,7 +54,7 @@ def handle_note_added(user, note):
     print(f"NOTE ADDED, DATA: {data}")
     try:
         resp = requests.post(f"{os.environ.get('JOT_URL')}/notion/page", data=data)
-        print(resp)
+        print(resp.data)
     except Exception as e:
         print(e)
 
