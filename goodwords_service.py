@@ -38,7 +38,7 @@ def process_event(event: object):
         channel_type = event['channel_type']
         temp_list = list(filter(lambda a: len(a) > 0, message.split(" ")))
         if channel_type == "im":
-            handle_note_added(message)
+            handle_note_added(event)
         elif channel == "C0441R6SKBN" and len(temp_list) == 1: 
             handle_word_sent(temp_list[0], millis_time, user)
         else:
