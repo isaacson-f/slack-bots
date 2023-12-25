@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import json
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import logging
@@ -53,7 +54,7 @@ def handle_note_added(user, note):
     data['note'] = note
     print(f"NOTE ADDED, DATA: {data}")
     try:
-        resp = requests.post(f"{os.environ.get('JOT_URL')}/notion/page", data=data)
+        resp = requests.post(f"{os.environ.get('JOT_URL')}/notion/page", data=json.dumps(data))
         print(resp.data)
     except Exception as e:
         print(e)
