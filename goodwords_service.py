@@ -47,7 +47,7 @@ def process_event(event: object):
         print(f"Event missing attribute ts or text: {event}")
 
 def handle_note_added(note):
-    print(note)
+    print(client.users_info(user=note.get('user')))
 
 def handle_word_sent(word: str, millis_time: float, user_id: str, historical: bool=False):
     prev_sent = find_word(word)
