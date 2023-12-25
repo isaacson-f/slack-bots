@@ -53,7 +53,7 @@ def handle_note_added(user, note):
     data['note'] = note
     print(f"NOTE ADDED, DATA: {data}")
     try:
-        resp = requests.post(f"{os.environ.get('JOT_URL')}/notion/page", json=data)
+        resp = requests.post(f"{os.environ.get('JOT_URL')}/notion/page", data=data)
         print(resp)
     except Exception as e:
         print(e)
