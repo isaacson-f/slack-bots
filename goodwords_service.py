@@ -6,6 +6,7 @@ import os
 import mongo_client
 from typing import Optional, List, Union
 import random
+import requests
 
 
 client = WebClient(token=os.environ.get("SLACK_TOKEN"))
@@ -38,7 +39,7 @@ def process_event(event: object):
         channel_type = event['channel_type']
         temp_list = list(filter(lambda a: len(a) > 0, message.split(" ")))
         if channel_type == "im":
-            handle_note_added(event)
+            handle_note_added(user, message)
         elif channel == "C0441R6SKBN" and len(temp_list) == 1: 
             handle_word_sent(temp_list[0], millis_time, user)
         else:
@@ -46,8 +47,14 @@ def process_event(event: object):
     else:
         print(f"Event missing attribute ts or text: {event}")
 
-def handle_note_added(note):
-    print(client.users_info(user=note.get('user')))
+def handle_note_added(user, note):
+    data = {}
+    data['name'] = client.users_info(user=user).get('user').get('real_name')
+    data['note'] = note
+    try:
+        requests.post(f"{os.environ.get('JOT_URL')}/notion/page", data=data)
+    except Exception as e:
+        print(e)
 
 def handle_word_sent(word: str, millis_time: float, user_id: str, historical: bool=False):
     prev_sent = find_word(word)
