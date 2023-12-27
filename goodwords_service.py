@@ -40,7 +40,7 @@ def process_event(event: object):
         channel_type = event['channel_type']
         temp_list = list(filter(lambda a: len(a) > 0, message.split(" ")))
         if channel_type == "im":
-            handle_note_added(user, message)
+            handle_note_added(user, message, channel)
         elif channel == "C0441R6SKBN" and len(temp_list) == 1: 
             handle_word_sent(temp_list[0], millis_time, user)
         else:
@@ -48,7 +48,7 @@ def process_event(event: object):
     else:
         print(f"Event missing attribute ts or text: {event}")
 
-def handle_note_added(user, note):
+def handle_note_added(user, note, channel):
     data = {}
     data['name'] = client.users_info(user=user).get('user').get('real_name')
     data['note'] = note
@@ -57,7 +57,7 @@ def handle_note_added(user, note):
         resp = requests.post(f"{os.environ.get('JOT_URL')}/notion/page", data=json.dumps(data), headers={
             'Content-Type':'application/json'
         })
-        print(resp.text)
+        client.chat_postMessage(channel, text=resp.text)
     except Exception as e:
         print(e)
 
