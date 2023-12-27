@@ -50,8 +50,11 @@ async def root(req: Dict[str, object], resp: Response):
     if req.get('challenge', False):
         return req['challenge']
     elif req.get('event', False):
-        print(f"Event Received: {req.get('event')}")
-        process_event(req.get('event'))
+        if req.get('event').get('bot_id', False):
+            print(f"Bot Message Received, skipping")
+        else:
+            print(f"Event Received: {req.get('event')}")
+            process_event(req.get('event'))
     else:
         resp.status_code = 400
         print(f'Event missing attribute: {req}')
