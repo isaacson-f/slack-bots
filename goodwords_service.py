@@ -57,7 +57,8 @@ def handle_note_added(user, note, channel):
         resp = requests.post(f"{os.environ.get('JOT_URL')}/notion/page", data=json.dumps(data), headers={
             'Content-Type':'application/json'
         })
-        client.chat_postMessage(channel, text=resp.text)
+        resp_json = json.loads(resp.text)
+        client.chat_postMessage(channel=channel, text=f"CONFIRMED, note added: {resp_json.get('message')}")
     except Exception as e:
         print(e)
 
