@@ -16,6 +16,8 @@ good_words_collection = mongo_client.get_good_words_collection()
 
 EMOJIS = os.environ.get("VALID_EMOJIS").split(' ')
 
+sent_slack_messages = {}
+
 def add_historical_goodwords():
     # Call the conversations.list method using the WebClient
     result = client.conversations_history(channel="C0441R6SKBN")
@@ -38,9 +40,10 @@ def process_event(event: object):
         user = event['user']
         channel = event['channel']
         channel_type = event['channel_type']
+        id = event['client_msg_id']
         temp_list = list(filter(lambda a: len(a) > 0, message.split(" ")))
-        if channel_type == "im":
-            handle_note_added(user, message, channel)
+        if channel_type == "im" and not sent_slack_messages.get(id, False):
+            handle_note_added(user, message, channel, id)
         elif channel == "C0441R6SKBN" and len(temp_list) == 1: 
             handle_word_sent(temp_list[0], millis_time, user)
         else:
@@ -48,7 +51,7 @@ def process_event(event: object):
     else:
         print(f"Event missing attribute ts or text: {event}")
 
-def handle_note_added(user, note, channel):
+def handle_note_added(user, note, channel, message_id):
     data = {}
     data['name'] = client.users_info(user=user).get('user').get('real_name')
     data['note'] = note
@@ -59,6 +62,7 @@ def handle_note_added(user, note, channel):
         })
         resp_json = json.loads(resp.text)
         client.chat_postMessage(channel=channel, text=f"CONFIRMED, note added: {resp_json.get('message')}")
+        sent_slack_messages[message_id] = note
     except Exception as e:
         print(e)
 
