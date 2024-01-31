@@ -60,6 +60,7 @@ def handle_note_added(user, note, channel, message_id):
         resp = requests.post(f"{os.environ.get('JOT_URL')}/notion/page", data=json.dumps(data), headers={
             'Content-Type':'application/json'
         })
+        print(f"Response received: {resp}")
         resp_json = json.loads(resp.text)
         client.chat_postMessage(channel=channel, text=f"CONFIRMED, note added: {resp_json.get('message')}")
         sent_slack_messages[message_id] = note
