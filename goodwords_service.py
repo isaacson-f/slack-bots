@@ -65,8 +65,7 @@ def handle_note_added(user, note, channel, message_id):
         client.chat_postMessage(channel=channel, text=f"CONFIRMED, note added: {resp_json.get('message')}")
         sent_slack_messages[message_id] = note
     except Exception as e:
-        if not "Error:" in note:
-            client.chat_postMessage(channel=channel, text=f"Error: {str(e)}")
+        print(str(e))
 
 def handle_word_sent(word: str, millis_time: float, user_id: str, historical: bool=False):
     prev_sent = find_word(word)
